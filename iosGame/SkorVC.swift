@@ -8,7 +8,15 @@
 import UIKit
 
 class SkorVC: UIViewController {
-
+    
+    @IBOutlet weak var lastSkorLabel: UILabel!
+    
+    @IBOutlet weak var highestSkorLabel: UILabel!
+    
+    @IBAction func sendStartButton(_ sender: UIButton) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

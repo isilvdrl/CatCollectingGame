@@ -11,7 +11,7 @@ import GameplayKit
 class GameScene: SKScene {
     
     var anaKarekter: SKSpriteNode = SKSpriteNode()
-    var sariYuvarlak:SKSpriteNode = SKSpriteNode()
+    var sariDaire:SKSpriteNode = SKSpriteNode()
     var kirmiziUcgen:SKSpriteNode = SKSpriteNode()
     var siyahKare:SKSpriteNode = SKSpriteNode()
     var skorLabel:SKLabelNode = SKLabelNode()
@@ -22,8 +22,8 @@ class GameScene: SKScene {
         if let tempAnaKarekter = self.childNode(withName: "anakarekter") as? SKSpriteNode {
             anaKarekter = tempAnaKarekter
         }
-        if let tempSariYuvarlak = self.childNode(withName: "sariyuvarlak") as? SKSpriteNode {
-            sariYuvarlak = tempSariYuvarlak
+        if let tempSariDaire = self.childNode(withName: "sariDaire") as? SKSpriteNode {
+            sariDaire = tempSariDaire
         }
         if let tempKirmiziUcgen = self.childNode(withName: "kirmiziucgen") as? SKSpriteNode {
             kirmiziUcgen = tempKirmiziUcgen
@@ -31,8 +31,9 @@ class GameScene: SKScene {
         if let tempSiyahKare = self.childNode(withName: "siyahkare") as? SKSpriteNode {
             siyahKare = tempSiyahKare
         }
-        if let tempSkorLabel = self.childNode(withName: "skorlabel") as? SKLabelNode {
+        if let tempSkorLabel = self.childNode(withName: "skorLabel") as? SKLabelNode {
             skorLabel = tempSkorLabel
+            skorLabel.text = "Skor: 0"
         }
     }
     
