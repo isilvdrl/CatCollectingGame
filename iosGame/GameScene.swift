@@ -10,7 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    var anaKarekter: SKSpriteNode = SKSpriteNode()
+    var anaKarakter: SKSpriteNode = SKSpriteNode()
     var sariDaire:SKSpriteNode = SKSpriteNode()
     var kirmiziUcgen:SKSpriteNode = SKSpriteNode()
     var siyahKare:SKSpriteNode = SKSpriteNode()
@@ -24,9 +24,9 @@ class GameScene: SKScene {
     
     //beginning at the scene
     override func didMove(to view: SKView) {
-        if let tempAnaKarekter = self.childNode(withName: "anakarekter") as? SKSpriteNode {
-            anaKarekter = tempAnaKarekter
-            anaKarekter.isUserInteractionEnabled = true
+        if let tempAnaKarakter = self.childNode(withName: "anaKarakter") as? SKSpriteNode {
+            anaKarakter = tempAnaKarakter
+            anaKarakter.isUserInteractionEnabled = true
         }
         if let tempSariDaire = self.childNode(withName: "sariDaire") as? SKSpriteNode {
             sariDaire = tempSariDaire
@@ -49,10 +49,10 @@ class GameScene: SKScene {
         if touchingControl {
             print("Hareket Ettir çalıştı: touchingControl: \(touchingControl)")
             let yukariHareket: SKAction = SKAction.moveBy(x: 0, y: +20, duration: 1)
-            anaKarekter.run(yukariHareket)
+            anaKarakter.run(yukariHareket)
         } else {
             let asagiHareket: SKAction = SKAction.moveBy(x: 0, y: -20, duration: 1)
-            anaKarekter.run(asagiHareket)
+            anaKarakter.run(asagiHareket)
         }
     }
 
@@ -72,28 +72,22 @@ class GameScene: SKScene {
         
     }
     
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("Touch began")
-        if let touch = touches.first {
-            let position = touch.location(in: self)
-            touchDown(atPoint: position)
-        }
+        
+        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-
+        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
-        if let touch = touches.first {
-            let position = touch.location(in: self)
-            touchUp(atPoint: position)
-        }
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-
+        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     
