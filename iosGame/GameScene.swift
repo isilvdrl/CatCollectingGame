@@ -18,12 +18,20 @@ class GameScene: SKScene {
     //for connect to GameViewController
     var viewController : UIViewController?
     
+    //takes the screen sizes
+    var ekranGenisligi : Int?
+    var ekranYuksekligi : Int?
+    
     //controlling touching moves
     var touchingControl = false
     var timer: Timer?
     
     //beginning at the scene
     override func didMove(to view: SKView) {
+        //takes the screen sizes
+        ekranGenisligi = Int(self.size.width)
+        ekranYuksekligi = Int(self.size.height)
+        
         if let tempAnaKarakter = self.childNode(withName: "anaKarakter") as? SKSpriteNode {
             anaKarakter = tempAnaKarakter
             anaKarakter.isUserInteractionEnabled = true
@@ -31,10 +39,10 @@ class GameScene: SKScene {
         if let tempSariDaire = self.childNode(withName: "sariDaire") as? SKSpriteNode {
             sariDaire = tempSariDaire
         }
-        if let tempKirmiziUcgen = self.childNode(withName: "kirmiziucgen") as? SKSpriteNode {
+        if let tempKirmiziUcgen = self.childNode(withName: "kirmiziUcgen") as? SKSpriteNode {
             kirmiziUcgen = tempKirmiziUcgen
         }
-        if let tempSiyahKare = self.childNode(withName: "siyahkare") as? SKSpriteNode {
+        if let tempSiyahKare = self.childNode(withName: "siyahKare") as? SKSpriteNode {
             siyahKare = tempSiyahKare
         }
         if let tempSkorLabel = self.childNode(withName: "skorLabel") as? SKLabelNode {
@@ -53,6 +61,20 @@ class GameScene: SKScene {
         } else {
             let asagiHareket: SKAction = SKAction.moveBy(x: 0, y: -20, duration: 1)
             anaKarakter.run(asagiHareket)
+        }
+        cisimlerinSerbestHareketi(cisimAdi: siyahKare, cisimHizi: -10)
+        cisimlerinSerbestHareketi(cisimAdi: kirmiziUcgen, cisimHizi: -5)
+    }
+    
+    func cisimlerinSerbestHareketi(cisimAdi: SKSpriteNode, cisimHizi: CGFloat){
+        if Int(cisimAdi.position.x) < 0 {
+            //siyahKare ekranın en soluna gelip ekrandan çıkmışsa,ekranın en soluna "random konuma" atılır
+            cisimAdi.position.x = CGFloat(ekranGenisligi! + 20)
+            cisimAdi.position.y = -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!)))
+        }
+        else{
+            let solaHareket:SKAction = SKAction.moveBy(x: cisimHizi, y: 0 ,duration: 6)
+            cisimAdi.run(solaHareket)
         }
     }
 
