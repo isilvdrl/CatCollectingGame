@@ -8,7 +8,14 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+enum CarpismaTipi:UInt32 {
+    case anaKarakter = 1
+    case sariDaire = 2
+    case kirmiziUcgen = 3
+    case siyahKare = 4
+}
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var anaKarakter: SKSpriteNode = SKSpriteNode()
     var sariDaire:SKSpriteNode = SKSpriteNode()
@@ -32,9 +39,13 @@ class GameScene: SKScene {
         ekranGenisligi = Int(self.size.width)
         ekranYuksekligi = Int(self.size.height)
         
+        self.physicsWorld.contactDelegate = self
+        
         if let tempAnaKarakter = self.childNode(withName: "anaKarakter") as? SKSpriteNode {
             anaKarakter = tempAnaKarakter
-            anaKarakter.isUserInteractionEnabled = true
+            anaKarakter.physicsBody?.categoryBitMask = CarpismaTipi.anaKarakter.rawValue
+            anaKarakter.physicsBody?.collisionBitMask = CarpismaTipi.sariDaire.rawValue | CarpismaTipi.kirmiziUcgen.rawValue | CarpismaTipi.siyahKare.rawValue
+            anaKarakter.physicsBody?.contactTestBitMask = CarpismaTipi.sariDaire.rawValue | CarpismaTipi.kirmiziUcgen.rawValue | CarpismaTipi.siyahKare.rawValue
         }
         if let tempSariDaire = self.childNode(withName: "sariDaire") as? SKSpriteNode {
             sariDaire = tempSariDaire
@@ -44,6 +55,9 @@ class GameScene: SKScene {
         }
         if let tempSiyahKare = self.childNode(withName: "siyahKare") as? SKSpriteNode {
             siyahKare = tempSiyahKare
+            siyahKare.physicsBody?.categoryBitMask = CarpismaTipi.siyahKare.rawValue
+            siyahKare.physicsBody?.collisionBitMask = CarpismaTipi.anaKarakter.rawValue
+            siyahKare.physicsBody?.contactTestBitMask = CarpismaTipi.anaKarakter.rawValue
         }
         if let tempSkorLabel = self.childNode(withName: "skorLabel") as? SKLabelNode {
             skorLabel = tempSkorLabel
@@ -68,7 +82,7 @@ class GameScene: SKScene {
     
     func cisimlerinSerbestHareketi(cisimAdi: SKSpriteNode, cisimHizi: CGFloat){
         if Int(cisimAdi.position.x) < 0 {
-            //siyahKare ekranın en soluna gelip ekrandan çıkmışsa,ekranın en soluna "random konuma" atılır
+            //cisim ekranın en soluna gelip ekrandan çıkmışsa,ekranın sağına "random konuma" atılır
             cisimAdi.position.x = CGFloat(ekranGenisligi! + 20)
             cisimAdi.position.y = -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!)))
         }
@@ -78,7 +92,6 @@ class GameScene: SKScene {
         }
     }
 
-    
     func touchDown(atPoint pos : CGPoint) {
         touchingControl = true
         print("ekrana dokundu, touchingControl: \(touchingControl)")
@@ -94,6 +107,17 @@ class GameScene: SKScene {
         
     }
     
+    //çarpışma kontrol
+    func didBegin(_ contact: SKPhysicsContact){
+        let basaAl:SKAction = SKAction.moveBy(x : CGFloat(ekranGenisligi! + 20), y : -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!))), duration: 0.02)
+        
+        if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.siyahKare.rawValue{
+            siyahKare.run(basaAl)
+        }
+        if contact.bodyA.categoryBitMask == CarpismaTipi.siyahKare.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
+            siyahKare.run(basaAl)
+        }
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
