@@ -70,6 +70,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             skorLabel = tempSkorLabel
             skorLabel.text = "Skor: 0"
         }
+        randomStart(cisimAdi: siyahKare, cisimHizi: -10)
+        randomStart(cisimAdi: kirmiziUcgen, cisimHizi: -5)
+        randomStart(cisimAdi: sariDaire, cisimHizi: -8)
+        
         timer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector (GameScene.hareketEttir), userInfo: nil, repeats: true)
     }
     
@@ -91,15 +95,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func cisimlerinSerbestHareketi(cisimAdi: SKSpriteNode, cisimHizi: CGFloat){
         if Int(cisimAdi.position.x) < 0 {
             //cisim ekranın en soluna gelip ekrandan çıkmışsa,ekranın sağına "random konuma" atılır
-            cisimAdi.position.x = CGFloat(ekranGenisligi! + 20)
-            cisimAdi.position.y = -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!)))
+            randomStart(cisimAdi: cisimAdi ,cisimHizi: cisimHizi)
         }
         else{
             let solaHareket:SKAction = SKAction.moveBy(x: cisimHizi, y: 0 ,duration: 6)
             cisimAdi.run(solaHareket)
         }
     }
-
+    
+    func randomStart(cisimAdi: SKSpriteNode,cisimHizi: CGFloat){
+        cisimAdi.position.x = CGFloat(ekranGenisligi! + 20)
+        cisimAdi.position.y = -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!)))
+    }
+    
     func touchDown(atPoint pos : CGPoint) {
         touchingControl = true
         print("ekrana dokundu, touchingControl: \(touchingControl)")
@@ -120,6 +128,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let basaAl:SKAction = SKAction.moveBy(x : CGFloat(ekranGenisligi! + 20), y : -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!))), duration: 0.02)
         //siyahKare
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.siyahKare.rawValue{
+            anaKarakter.run(basaAl)
             //son skor skor sayfasına aktarılır
             let d = UserDefaults.standard
             d.set(totalSkor, forKey: "lastSkor")
@@ -128,7 +137,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.siyahKare.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
-            
+            anaKarakter.run(basaAl)
             let d = UserDefaults.standard
             d.set(totalSkor, forKey: "lastSkor")
             timer?.invalidate()
