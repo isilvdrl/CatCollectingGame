@@ -19,8 +19,18 @@ class SkorVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let d = UserDefaults.standard
+        let lastSkor = d.integer(forKey: "lastSkor")
+        let highestSkor = d.integer(forKey: "highestSkor")
+        
+        lastSkorLabel.text = "\(lastSkor)"
+        
+        if lastSkor > highestSkor {
+            d.set(lastSkor, forKey: "highestSkor")
+        }
+        
+        highestSkorLabel.text = String(d.integer(forKey: "highestSkor"))
     }
     
 

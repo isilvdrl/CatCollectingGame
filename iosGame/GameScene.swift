@@ -120,10 +120,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let basaAl:SKAction = SKAction.moveBy(x : CGFloat(ekranGenisligi! + 20), y : -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!))), duration: 0.02)
         //siyahKare
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.siyahKare.rawValue{
+            //son skor skor sayfasına aktarılır
+            let d = UserDefaults.standard
+            d.set(totalSkor, forKey: "lastSkor")
+            //sayac durdurulur ve skor sayfasına geçiş sağlanır
             timer?.invalidate()
             self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.siyahKare.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
+            
+            let d = UserDefaults.standard
+            d.set(totalSkor, forKey: "lastSkor")
             timer?.invalidate()
             self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
         }
