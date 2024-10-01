@@ -49,9 +49,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         if let tempSariDaire = self.childNode(withName: "sariDaire") as? SKSpriteNode {
             sariDaire = tempSariDaire
+            sariDaire.physicsBody?.categoryBitMask = CarpismaTipi.sariDaire.rawValue
+            sariDaire.physicsBody?.collisionBitMask = CarpismaTipi.anaKarakter.rawValue
+            sariDaire.physicsBody?.contactTestBitMask = CarpismaTipi.anaKarakter.rawValue
         }
         if let tempKirmiziUcgen = self.childNode(withName: "kirmiziUcgen") as? SKSpriteNode {
             kirmiziUcgen = tempKirmiziUcgen
+            kirmiziUcgen.physicsBody?.categoryBitMask = CarpismaTipi.kirmiziUcgen.rawValue
+            kirmiziUcgen.physicsBody?.collisionBitMask = CarpismaTipi.anaKarakter.rawValue
+            kirmiziUcgen.physicsBody?.contactTestBitMask = CarpismaTipi.anaKarakter.rawValue
         }
         if let tempSiyahKare = self.childNode(withName: "siyahKare") as? SKSpriteNode {
             siyahKare = tempSiyahKare
@@ -78,6 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         cisimlerinSerbestHareketi(cisimAdi: siyahKare, cisimHizi: -10)
         cisimlerinSerbestHareketi(cisimAdi: kirmiziUcgen, cisimHizi: -5)
+        cisimlerinSerbestHareketi(cisimAdi: sariDaire, cisimHizi: -8)
     }
     
     func cisimlerinSerbestHareketi(cisimAdi: SKSpriteNode, cisimHizi: CGFloat){
@@ -110,13 +117,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //çarpışma kontrol
     func didBegin(_ contact: SKPhysicsContact){
         let basaAl:SKAction = SKAction.moveBy(x : CGFloat(ekranGenisligi! + 20), y : -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!))), duration: 0.02)
-        
+        //siyahKare
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.siyahKare.rawValue{
             siyahKare.run(basaAl)
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.siyahKare.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
             siyahKare.run(basaAl)
         }
+        //sariDaire
+        if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.sariDaire.rawValue{
+            sariDaire.run(basaAl)
+        }
+        if contact.bodyA.categoryBitMask == CarpismaTipi.sariDaire.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
+            sariDaire.run(basaAl)
+        }
+        //kirmiziUcgen
+        if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.kirmiziUcgen.rawValue{
+            kirmiziUcgen.run(basaAl)
+        }
+        if contact.bodyA.categoryBitMask == CarpismaTipi.kirmiziUcgen.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
+            kirmiziUcgen.run(basaAl)
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
