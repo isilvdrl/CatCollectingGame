@@ -22,6 +22,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var kirmiziUcgen:SKSpriteNode = SKSpriteNode()
     var siyahKare:SKSpriteNode = SKSpriteNode()
     var skorLabel:SKLabelNode = SKLabelNode()
+    var totalSkor: Int = 0
     //for connect to GameViewController
     var viewController : UIViewController?
     
@@ -119,24 +120,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let basaAl:SKAction = SKAction.moveBy(x : CGFloat(ekranGenisligi! + 20), y : -CGFloat(arc4random_uniform(UInt32(ekranYuksekligi!))), duration: 0.02)
         //siyahKare
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.siyahKare.rawValue{
-            siyahKare.run(basaAl)
+            timer?.invalidate()
+            self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.siyahKare.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
-            siyahKare.run(basaAl)
+            timer?.invalidate()
+            self.viewController?.performSegue(withIdentifier: "gameToSkor", sender: nil)
         }
         //sariDaire
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.sariDaire.rawValue{
             sariDaire.run(basaAl)
+            totalSkor += 20
+            skorLabel.text = "Skor: \(totalSkor)"
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.sariDaire.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
             sariDaire.run(basaAl)
+            totalSkor += 20
+            skorLabel.text = "Skor: \(totalSkor)"
         }
         //kirmiziUcgen
         if contact.bodyA.categoryBitMask == CarpismaTipi.anaKarakter.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.kirmiziUcgen.rawValue{
             kirmiziUcgen.run(basaAl)
+            totalSkor += 50
+            skorLabel.text = "Skor: \(totalSkor)"
         }
         if contact.bodyA.categoryBitMask == CarpismaTipi.kirmiziUcgen.rawValue && contact.bodyB.categoryBitMask == CarpismaTipi.anaKarakter.rawValue{
             kirmiziUcgen.run(basaAl)
+            totalSkor += 50
+            skorLabel.text = "Skor: \(totalSkor)"
         }
         
     }
